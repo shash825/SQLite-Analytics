@@ -22,3 +22,30 @@ GROUP BY c.id, c.first_name, c.last_name
 ORDER BY total_spend DESC
 LIMIT 5;
 
+-- =============================================================
+-- TASK 2 - Total Revenue by Product Category (all orders)
+-- Logic: sum line totals grouped by the product's category.
+-- =============================================================
+SELECT
+    p.category,
+    ROUND(SUM(oi.quantity * oi.unit_price), 2) AS revenue
+FROM products    AS p
+JOIN order_items AS oi ON oi.product_id = p.id
+GROUP BY p.category
+ORDER BY revenue DESC;
+
+
+-- =============================================================
+-- TASK 2 (variant) - Revenue by Category, Delivered orders only
+-- For comparison against the all-orders version above. Only
+-- realized revenue from orders that actually shipped.
+-- =============================================================
+SELECT
+    p.category,
+    ROUND(SUM(oi.quantity * oi.unit_price), 2) AS revenue_delivered
+FROM products    AS p
+JOIN order_items AS oi ON oi.product_id = p.id
+JOIN orders      AS o  ON o.id          = oi.order_id
+WHERE o.status = 'Delivered'
+GROUP BY p.category
+ORDER BY revenue_delivered DESC;
