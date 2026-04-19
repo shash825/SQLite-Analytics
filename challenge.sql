@@ -73,3 +73,32 @@ JOIN (
 ) AS dept_avg ON dept_avg.department_id = e.department_id
 WHERE e.salary > dept_avg.avg_salary
 ORDER BY d.name ASC, e.salary DESC;
+
+-- =============================================================
+-- TASK 4 - Cities with the Most Loyal (Gold) Customers
+-- Logic: count customers whose loyalty_level is 'Gold',
+-- grouped by city. Tie-break alphabetically on city.
+-- =============================================================
+SELECT
+    city,
+    COUNT(*) AS gold_customer_count
+FROM customers
+WHERE loyalty_level = 'Gold'
+GROUP BY city
+ORDER BY gold_customer_count DESC, city ASC;
+
+
+-- =============================================================
+-- TASK 4 (extension) - Loyalty Distribution by City
+-- Full Gold / Silver / Bronze breakdown per city to surface any
+-- geographic patterns in the customer base.
+-- =============================================================
+SELECT
+    city,
+    SUM(CASE WHEN loyalty_level = 'Gold'   THEN 1 ELSE 0 END) AS gold,
+    SUM(CASE WHEN loyalty_level = 'Silver' THEN 1 ELSE 0 END) AS silver,
+    SUM(CASE WHEN loyalty_level = 'Bronze' THEN 1 ELSE 0 END) AS bronze,
+    COUNT(*)                                                  AS total_customers
+FROM customers
+GROUP BY city
+ORDER BY gold DESC, city ASC;
