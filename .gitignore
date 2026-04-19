@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# VS Code SQLTools scratch files
+*.session.sql
+.vscode/
+
+# OS / editor junk
+Thumbs.db
+*.swp
